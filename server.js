@@ -72,3 +72,11 @@ app.get("/scrape", function (req, res) {
   });
 });
 
+app.get("/articles", function (req, res) {
+  db.article.find({}).then(function (dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      res.json(err);
+    });
+});
