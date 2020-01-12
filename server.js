@@ -11,29 +11,64 @@ var db = require("./models");
 var PORT = process.env.PORT || 3000;
 app.use(express.static("public"));
 
+// Configure middleware
 // Parse request body as JSON
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+  extended: true
+}));
 app.use(express.json());
 
+app.engine("handlebars", exhandlebars({
+  defaultLayout: "main"
+}));
+app.set("view engine", "handlebars");
+
+
 // Start the server
-app.listen(PORT, function() {
+app.listen(PORT, function () {
   console.log("App running on port " + PORT + "!");
 });
 
-
-// Configure middleware
+// Connect to the Mongo DB
+mongoose.connect("mongodb://localhost/newsscraper", {
+  useNewUrlParser: true
+});
 
 // var routes = require('./controllers/newscontroller.js');
 // app.use(routes);
 
-app.engine("handlebars", exhandlebars({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
-
-app.get("/", function(req, res){
+// Routes
+app.get("/", function (req, res) {
   res.render("index");
 
 })
 
-// Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/newsscraper", { useNewUrlParser: true });
+app.get("/scrape", function (req, res) {
+  axios.get("https://www.seattletimes.com/business/").then(function (response) {
+
+    var $ = cheerio.load(response.data);
+
+    $("ul li").each(function (i, element) {
+      var result = {};
+      result.title = $(this)
+        .children("a")
+        .text();
+      result.link = $(this)
+        .children("a")
+        .attr("href");
+
+      db.article.create(result)
+        .then(function (dbArticle) {
+          // View the added result in the console
+          console.log(dbArticle);
+        })
+        .catch(function (err) {
+          // If an error occurred, log it
+          console.log(err);
+        });
+    });
+
+    res.send("Scrape Complete");
+  });
+});
 

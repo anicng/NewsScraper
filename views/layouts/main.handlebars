@@ -12,12 +12,32 @@
 </head>
 
 <body>
+    {{!-- NavBar  --}}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">News Scraper</a>
+        <a class="navbar-brand" href="#">News Scraper</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Saved Article</a>
+                </li>
+            </ul>
+
+            <button class="btn btn-outline-success my-2 mx-1 my-md-0 my-sm-0 p2" type="submit">Scrape New
+                Articles!</button>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Clear Articles!</button>
+        </div>
     </nav>
-    <jumbotron>
-        <h1>Seattle Times Edition</h1>
-    </jumbotron>
+    <div class="jumbotron text-center">
+        <h2>Seattle Times Edition</h2>
+
+    </div>
     {{{ body }}}
 
     {{!-- Add in jQuery --}}
