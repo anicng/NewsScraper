@@ -41,7 +41,7 @@ mongoose.connect("mongodb://localhost/newsscraper", {
 app.get("/", function (req, res) {
   res.render("index");
 
-})
+});
 
 app.get("/scrape", function (req, res) {
   axios.get("https://www.seattletimes.com/business/").then(function (response) {
@@ -77,6 +77,17 @@ app.get("/articles", function (req, res) {
       res.json(dbArticle);
     })
     .catch(function (err) {
+      res.json(err);
+    });
+});
+
+app.get("/articles/:id", function(req, res) {
+  db.Article.findOne({ _id: req.params.id })
+    .populate("note")
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
       res.json(err);
     });
 });
