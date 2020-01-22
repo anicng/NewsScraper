@@ -74,7 +74,7 @@ app.get("/scrape", function (req, res) {
 
 app.get("/articles", function (req, res) {
   db.article.find({}).then(function (dbArticle) {
-      // res.json(dbArticle);
+      res.json(dbArticle);
       let handlebarsObject = {
         article: dbArticle
       }
